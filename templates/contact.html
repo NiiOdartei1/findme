@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact | FindMe{% endblock %}
+
+{% block content %}
+<section class="page-hero simple">
+  <div class="container">
+    <p class="eyebrow">Get in touch</p>
+    <h1>We'd love to hear from you.</h1>
+  </div>
+</section>
+
+<section class="container contact-page">
+  <div class="contact-layout">
+    <div class="contact-form-wrap">
+      <h2>Send us a message</h2>
+      <form class="contact-form">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" placeholder="Your full name" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select required>
+            <option>Select a topic</option>
+            <option>Order inquiry</option>
+            <option>Product question</option>
+            <option>Returns & exchanges</option>
+            <option>Feedback</option>
+            <option>Collaboration</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea rows="6" placeholder="Tell us what's on your mind..." required></textarea>
+        </div>
+        <button type="submit" class="button primary full">Send message</button>
+      </form>
+    </div>
+
+    <aside class="contact-info">
+      <h3>Contact info</h3>
+      
+      <div class="info-block">
+        <h4>Customer service</h4>
+        <p>
+          <strong>Email:</strong><br>
+          <a href="mailto:support@findme.shop">support@findme.shop</a>
+        </p>
+        <p>
+          <strong>Hours:</strong><br>
+          Monday–Friday: 9am–6pm PT<br>
+          Saturday: 10am–4pm PT
+        </p>
+      </div>
+
+      <div class="info-block">
+        <h4>Shipping & Returns</h4>
+        <p>
+          Orders ship within 1-2 business days. Returns are free within 30 days.
+        </p>
+        <p>
+          <a href="#">Read our full policy</a>
+        </p>
+      </div>
+
+      <div class="info-block">
+        <h4>Follow us</h4>
+        <ul class="social-links">
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Pinterest</a></li>
+          <li><a href="#">TikTok</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="faq-section container">
+  <div class="section-heading narrow">
+    <p class="eyebrow">Frequently asked</p>
+    <h2>Common questions answered.</h2>
+  </div>
+  
+  <div class="faq-grid">
+    <details class="faq-item">
+      <summary>What is your return policy?</summary>
+      <p>We offer free returns within 30 days of purchase. Items must be unworn and in original packaging. Contact our team for a prepaid return label.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>How long does shipping take?</summary>
+      <p>Standard shipping typically arrives within 3-5 business days. Express and Priority options are available at checkout for faster delivery.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Do you offer international shipping?</summary>
+      <p>Yes, we ship to over 50 countries. Shipping costs and times vary by location. Import duties may apply depending on your country.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can I modify my order?</summary>
+      <p>If your order hasn't shipped yet, contact us within 2 hours of purchase and we'll be happy to help make changes.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Do you offer gift cards?</summary>
+      <p>Yes! Digital and physical gift cards are available in any amount from GH₵ 50 to GH₵ 500. Perfect for the minimalist in your life.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>How do I care for my items?</summary>
+      <p>Each piece comes with detailed care instructions. Generally, machine wash cold and lay flat to dry to preserve quality and longevity.</p>
+    </details>
+  </div>
+</section>
+{% endblock %}

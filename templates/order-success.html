@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmed | FindMe{% endblock %}
+
+{% block content %}
+<section class="page-hero simple">
+  <div class="container">
+    <div class="success-section">
+      <div class="success-icon">✓</div>
+      <p class="eyebrow">Order confirmed</p>
+      <h1>Thank you for your order.</h1>
+      <p>We've sent a confirmation to your email. Your order will ship within 1-2 business days.</p>
+      
+      <div class="order-summary">
+        <div class="summary-item">
+          <strong>Order number</strong>
+          <span>ORD-2024-8847</span>
+        </div>
+        <div class="summary-item">
+          <strong>Estimated delivery</strong>
+          <span>August 22-25, 2024</span>
+        </div>
+        <div class="summary-item">
+          <strong>Tracking</strong>
+          <span><a href="#">Track shipment</a></span>
+        </div>
+      </div>
+
+      <div class="success-actions">
+        <a href="{{ url_for('account') }}" class="button primary">View orders</a>
+        <a href="{{ url_for('shop') }}" class="button secondary">Continue shopping</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container related-section">
+  <div class="section-heading">
+    <p class="eyebrow">Complete the look</p>
+    <h2>You might also like.</h2>
+  </div>
+  <div class="product-grid">
+    {% for product in products[:3] %}
+      <article class="product-card">
+        <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-image-wrap">
+          <img src="{{ product.image }}" alt="{{ product.name }}" />
+        </a>
+        <div class="product-meta">
+          <div class="product-topline">
+            <span>{{ product.category }}</span>
+            <span>{{ product.rating }} ★</span>
+          </div>
+          <h3>{{ product.name }}</h3>
+          <div class="product-price-row">
+            <strong>{{ currency(product.price) }}</strong>
+            <span>{{ currency(product.old_price) if product.old_price else '' }}</span>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

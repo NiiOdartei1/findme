@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} | BRiGHTyS{% endblock %}
+
+{% block content %}
+<section class="container product-page">
+  <div class="product-gallery">
+    <div class="main-image">
+      <img src="{{ product.gallery[0] }}" alt="{{ product.name }}" />
+    </div>
+    <div class="thumbnail-row">
+      {% for image in product.gallery %}
+        <img src="{{ image }}" alt="{{ product.name }} thumbnail" />
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="product-info">
+    <p class="eyebrow">{{ product.category }}</p>
+    <h1>{{ product.name }}</h1>
+    <div class="rating-line">
+      <span>{{ product.rating }} ★★★★★</span>
+      <span>{{ product.reviews_count }} reviews</span>
+    </div>
+    <div class="price-row">
+      <strong>{{ currency(product.price) }}</strong>
+      <span>{{ currency(product.old_price) if product.old_price else '' }}</span>
+    </div>
+
+    <p class="description">{{ product.description }}</p>
+
+    <div class="option-group">
+      <label>Color</label>
+      <div class="chip-row colors">
+        {% for color in product.colors %}
+          <span>{{ color }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="option-group">
+      <label>Size</label>
+      <div class="chip-row sizes">
+        {% for size in product.sizes %}
+          <span>{{ size }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post" class="purchase-form">
+      <button type="submit" class="button primary large">Add to cart</button>
+      <button type="button" class="button secondary large">Add to wishlist</button>
+    </form>
+
+    <div class="product-features">
+      <div><strong>Free shipping</strong><small>On orders over GH₵ 250</small></div>
+      <div><strong>Easy returns</strong><small>30-day return policy</small></div>
+      <div><strong>Secure checkout</strong><small>Protected payment</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="container related-section">
+  <div class="section-heading">
+    <p class="eyebrow">You may also like</p>
+    <h2>Complete the look.</h2>
+  </div>
+
+  <div class="product-grid">
+    {% for item in related %}
+      <article class="product-card">
+        <a href="{{ url_for('product_detail', product_id=item.id) }}" class="product-image-wrap">
+          <img src="{{ item.image }}" alt="{{ item.name }}" />
+        </a>
+        <div class="product-meta">
+          <div class="product-topline">
+            <span>{{ item.category }}</span>
+            <span>{{ item.rating }} ★</span>
+          </div>
+          <h3>{{ item.name }}</h3>
+          <div class="product-price-row">
+            <strong>{{ currency(item.price) }}</strong>
+            <span>{{ currency(item.old_price) if item.old_price else '' }}</span>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

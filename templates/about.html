@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}About | FindMe{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container hero-content">
+    <div class="hero-copy">
+      <p class="eyebrow">Our story</p>
+      <h1>Elevated essentials for modern living.</h1>
+      <p>FindMe began with a simple belief: that everyday clothing should be extraordinary. We partner with master craftspeople and premium fabric mills to create pieces that transcend trends and reward long-term wear.</p>
+      <div class="hero-actions">
+        <a href="{{ url_for('shop') }}" class="button primary">Shop the collection</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="image-card large">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=80" alt="FindMe studio" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container featured-section">
+  <div class="section-heading narrow">
+    <p class="eyebrow">Our values</p>
+    <h2>Built on principles that matter.</h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-card">
+      <h3>Quality first</h3>
+      <p>We invest in the best fabrics and construction techniques, creating pieces built to last decades, not seasons.</p>
+    </div>
+    <div class="value-card">
+      <h3>Ethical production</h3>
+      <p>Fair labor, sustainable materials, and transparent supply chains. We know who makes every piece.</p>
+    </div>
+    <div class="value-card">
+      <h3>Minimal design</h3>
+      <p>No unnecessary details, no fleeting trends—just refined silhouettes that pair effortlessly with everything.</p>
+    </div>
+    <div class="value-card">
+      <h3>Customer care</h3>
+      <p>Lifetime repairs, easy returns, and dedicated support. We stand behind every item we sell.</p>
+    </div>
+  </div>
+</section>
+
+<section class="promo-band">
+  <div class="container promo-grid">
+    <div>
+      <p class="eyebrow">Since 2022</p>
+      <h3>Reimagining how quality brands build lasting relationships with customers.</h3>
+    </div>
+    <a href="{{ url_for('contact') }}" class="button secondary">Get in touch</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Order {{ order.order_number }} | FindMe Admin{% endblock %}
+{% block page_title %}Order {{ order.order_number }}{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+  <div class="order-detail-header">
+    <div>
+      <h3>Order details</h3>
+      <p class="empty-note">{{ order.created_at.strftime('%B %d, %Y') }}</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('admin_update_order_status', order_id=order.id) }}" class="status-form">
+      <select name="status">
+        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+        <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+        <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+        <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+      </select>
+      <button type="submit" class="admin-button admin-button-primary">Update status</button>
+    </form>
+  </div>
+
+  <div class="order-sections">
+    <div class="order-section">
+      <h4>Customer</h4>
+      <p><strong>Email:</strong> {{ order.email }}</p>
+      <p><strong>Address:</strong> {{ order.shipping_address }}</p>
+    </div>
+
+    <div class="order-section">
+      <h4>Items</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order.items %}
+            <tr>
+              <td>{{ item.product.name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ currency(item.price) }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="order-section">
+      <h4>Summary</h4>
+      <div class="summary-line"><span>Subtotal:</span><strong>{{ currency(order.subtotal) }}</strong></div>
+      <div class="summary-line"><span>Shipping:</span><strong>{{ currency(order.shipping_cost) }}</strong></div>
+      <div class="summary-line total"><span>Total:</span><strong>{{ currency(order.total) }}</strong></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
