@@ -511,9 +511,11 @@ def admin_add_category():
     return render_template('admin/add_category.html')
 
 
+# Ensure database tables and seed data exist for both local runs and Railway/Gunicorn imports.
+init_db()
+
+
 if __name__ == '__main__':
-    init_db()
-    # Production: Railway sets PORT env var; development uses 5000
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ['PORT'])
     debug_mode = os.environ.get('FLASK_ENV') == 'development'
     app.run(host='0.0.0.0', port=port, debug=debug_mode)
