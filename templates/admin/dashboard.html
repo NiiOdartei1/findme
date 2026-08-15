@@ -1,0 +1,64 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Dashboard | FindMe Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-grid">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-label">Products</span>
+      <strong class="stat-value">{{ total_products }}</strong>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Orders</span>
+      <strong class="stat-value">{{ total_orders }}</strong>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Revenue</span>
+      <strong class="stat-value">{{ currency(total_revenue) }}</strong>
+    </div>
+  </div>
+
+  <section class="admin-panel">
+    <div class="panel-header">
+      <h3>Recent orders</h3>
+      <a href="{{ url_for('admin_orders') }}" class="text-link">View all</a>
+    </div>
+
+    <div class="table-wrap">
+      {% if recent_orders %}
+        <table>
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in recent_orders %}
+              <tr>
+                <td>{{ order.order_number }}</td>
+                <td>{{ currency(order.total) }}</td>
+                <td><span class="status-badge {{ order.status|lower }}">{{ order.status }}</span></td>
+                <td>{{ order.created_at.strftime('%b %d, %Y') }}</td>
+                <td><a href="{{ url_for('admin_order_detail', order_id=order.id) }}" class="text-link">View</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="empty-note">No orders yet.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <div class="quick-actions">
+    <a href="{{ url_for('admin_add_product') }}" class="admin-button admin-button-primary">Add product</a>
+    <a href="{{ url_for('admin_add_category') }}" class="admin-button admin-button-secondary">Add category</a>
+  </div>
+</div>
+{% endblock %}

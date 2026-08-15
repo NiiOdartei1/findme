@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}My Account | FindMe{% endblock %}
+
+{% block content %}
+<section class="page-hero simple">
+  <div class="container">
+    <p class="eyebrow">Your account</p>
+    <h1>Welcome back.</h1>
+  </div>
+</section>
+
+<section class="container account-page">
+  <div class="account-layout">
+    <aside class="account-sidebar">
+      <nav class="account-nav">
+        <button class="nav-item active" data-section="orders">Order history</button>
+        <button class="nav-item" data-section="profile">Profile settings</button>
+        <button class="nav-item" data-section="wishlist">Wishlist</button>
+        <button class="nav-item logout">Logout</button>
+      </nav>
+    </aside>
+
+    <div class="account-content">
+      <!-- Orders Section -->
+      <div class="account-section active" id="orders-section">
+        <div class="section-header">
+          <h2>Order history</h2>
+        </div>
+        <div class="orders-list">
+          {% for order in orders %}
+            <div class="order-card">
+              <div class="order-header">
+                <div>
+                  <strong>{{ order.order_number }}</strong>
+                  <span>{{ order.created_at.strftime('%b %d, %Y') }}</span>
+                </div>
+                <span class="order-status {{ order.status|lower }}">{{ order.status }}</span>
+              </div>
+              <div class="order-details">
+                <span>{{ order.items|length }} item{{ 's' if order.items|length != 1 else '' }}</span>
+                <strong>{{ currency(order.total) }}</strong>
+              </div>
+              <a href="#" class="text-button">View order</a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="account-section" id="profile-section">
+        <div class="section-header">
+          <h2>Profile settings</h2>
+        </div>
+        <form class="profile-form">
+          <div class="form-group">
+            <label>Full name</label>
+            <input type="text" value="Sarah Anderson" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" value="sarah@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" value="+1 (555) 123-4567" />
+          </div>
+          <div class="form-group">
+            <label>Shipping address</label>
+            <textarea rows="4">123 Main Street
+San Francisco, CA 94105
+United States</textarea>
+          </div>
+          <button type="submit" class="button primary">Save changes</button>
+        </form>
+      </div>
+
+      <!-- Wishlist Section -->
+      <div class="account-section" id="wishlist-section">
+        <div class="section-header">
+          <h2>Your wishlist</h2>
+        </div>
+        <div class="wishlist-empty">
+          <p>Your wishlist is empty.</p>
+          <a href="{{ url_for('shop') }}" class="button secondary">Continue shopping</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.nav-item:not(.logout)').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const section = btn.dataset.section;
+      document.querySelectorAll('.account-section').forEach(s => s.classList.remove('active'));
+      document.getElementById(section + '-section').classList.add('active');
+    });
+  });
+
+  document.querySelector('.nav-item.logout').addEventListener('click', () => {
+    alert('Logout functionality would be implemented here');
+  });
+</script>
+{% endblock %}

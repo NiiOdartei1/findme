@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart | BRiGHTyS{% endblock %}
+
+{% block content %}
+<section class="page-hero simple">
+  <div class="container">
+    <p class="eyebrow">Your bag</p>
+    <h1>Shopping cart</h1>
+  </div>
+</section>
+
+<section class="container cart-page">
+  {% if cart_items %}
+    <div class="cart-layout">
+      <div class="cart-items">
+        {% for item in cart_items %}
+          <div class="cart-item">
+            <img src="{{ item.product.image }}" alt="{{ item.product.name }}" />
+            <div class="cart-item-info">
+              <h3>{{ item.product.name }}</h3>
+              <p>{{ item.product.category }}</p>
+              <div class="cart-item-controls">
+                <form action="{{ url_for('cart') }}" method="post">
+                  <input type="hidden" name="action" value="update" />
+                  <input type="hidden" name="product_id" value="{{ item.product.id }}" />
+                  <select name="quantity">
+                    {% for n in range(1, 6) %}
+                      <option value="{{ n }}" {% if n == item.quantity %}selected{% endif %}>{{ n }}</option>
+                    {% endfor %}
+                  </select>
+                  <button type="submit">Update</button>
+                </form>
+                <form action="{{ url_for('cart') }}" method="post">
+                  <input type="hidden" name="action" value="remove" />
+                  <input type="hidden" name="product_id" value="{{ item.product.id }}" />
+                  <button type="submit" class="text-button">Remove</button>
+                </form>
+              </div>
+            </div>
+            <div class="cart-item-price">{{ currency(item.item_total) }}</div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <aside class="summary-box">
+        <h3>Order summary</h3>
+        <div class="summary-row"><span>Subtotal</span><strong>{{ currency(total) }}</strong></div>
+        <div class="summary-row"><span>Shipping</span><strong>{{ currency(shipping) }}</strong></div>
+        <div class="summary-row total"><span>Total</span><strong>{{ currency(grand_total) }}</strong></div>
+        <a href="{{ url_for('checkout') }}" class="button primary full">Proceed to checkout</a>
+      </aside>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3>Your cart is empty.</h3>
+      <a href="{{ url_for('shop') }}" class="button primary">Continue shopping</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

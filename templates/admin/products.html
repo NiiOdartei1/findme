@@ -1,0 +1,55 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Products | FindMe Admin{% endblock %}
+{% block page_title %}Products{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+  <div class="panel-header">
+    <h3>Inventory</h3>
+    <a href="{{ url_for('admin_add_product') }}" class="admin-button admin-button-primary">Add product</a>
+  </div>
+
+  {% with messages = get_flashed_messages(category_filter=['success']) %}
+    {% if messages %}
+      <div class="admin-alert admin-alert-success">{{ messages[0] }}</div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="table-wrap">
+    {% if products %}
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+            <tr>
+              <td>{{ product.name }}</td>
+              <td>{{ product.category.name }}</td>
+              <td>{{ currency(product.price) }}</td>
+              <td>{{ product.stock }}</td>
+              <td>
+                <div class="inline-actions">
+                  <a href="{{ url_for('admin_edit_product', product_id=product.id) }}" class="text-link">Edit</a>
+                  <form action="{{ url_for('admin_delete_product', product_id=product.id) }}" method="POST">
+                    <button type="submit" class="text-link danger" onclick="return confirm('Delete this product?')">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="empty-note">No products available.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}FindMe{% endblock %}</title>
+    <meta name="description" content="Premium clothing and accessories for elevated everyday style." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    {% if request.path.startswith('/admin') %}
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}" />
+    {% else %}
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    {% endif %}
+  </head>
+  <body>
+    {% if request.path.startswith('/admin') %}
+      <header class="site-header admin-header">
+        <div class="topbar admin-topbar">
+          <p>FindMe Admin Control Panel</p>
+        </div>
+        <nav class="navbar container admin-navbar">
+          <a href="{{ url_for('admin') }}" class="brand admin-brand">FindMe Admin</a>
+          <div class="nav-links admin-nav-links">
+            <a href="{{ url_for('admin') }}">Dashboard</a>
+            <a href="{{ url_for('admin_products') }}">Products</a>
+            <a href="{{ url_for('admin_categories') }}">Categories</a>
+            <a href="{{ url_for('admin_orders') }}">Orders</a>
+          </div>
+          <div class="nav-actions admin-nav-actions">
+            <a href="{{ url_for('admin_logout') }}">Logout</a>
+          </div>
+        </nav>
+      </header>
+    {% else %}
+      <header class="site-header">
+        <div class="topbar">
+          <p>Free shipping on orders over GH₵ 250</p>
+        </div>
+        <nav class="navbar container">
+          <a href="{{ url_for('index') }}" class="brand">FindMe</a>
+          <div class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('shop') }}">Shop</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+          </div>
+          <div class="nav-actions">
+            <a href="{{ url_for('account') }}">Account</a>
+            <a href="{{ url_for('cart') }}" class="cart-link">
+              Cart <span>{{ cart_count }}</span>
+            </a>
+          </div>
+        </nav>
+      </header>
+    {% endif %}
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h3>FindMe</h3>
+          <p>Premium essentials for a refined everyday wardrobe.</p>
+        </div>
+        <div>
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="{{ url_for('shop') }}">New Arrivals</a></li>
+            <li><a href="{{ url_for('shop') }}">Essentials</a></li>
+            <li><a href="{{ url_for('shop') }}">Accessories</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="{{ url_for('contact') }}">Shipping</a></li>
+            <li><a href="{{ url_for('contact') }}">Returns</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Follow</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Pinterest</a></li>
+            <li><a href="#">TikTok</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>
