@@ -7,11 +7,11 @@ app = Flask(__name__)
 
 def get_database_url():
     database_url = os.environ.get('DATABASE_URL')
-    if database_url:
-        if database_url.startswith('postgres://'):
-            return database_url.replace('postgres://', 'postgresql://', 1)
-        return database_url
-    return 'sqlite:///findme.db'
+    if not database_url:
+        raise RuntimeError('DATABASE_URL is required. Set the PostgreSQL connection string in Railway before deploying.')
+    if database_url.startswith('postgres://'):
+        return database_url.replace('postgres://', 'postgresql://', 1)
+    return database_url
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = get_database_url()
