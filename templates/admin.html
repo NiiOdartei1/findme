@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin | FindMe{% endblock %}
+
+{% block content %}
+<section class="container" style="padding: 5rem 0; text-align: center;">
+  <p class="eyebrow">Redirecting...</p>
+  <h1>Admin panel</h1>
+  <p style="color: var(--muted); margin-bottom: 2rem;">Taking you to the admin dashboard...</p>
+  <script>
+    window.location.href = "{{ url_for('admin') }}";
+  </script>
+  <a href="{{ url_for('admin') }}" class="button primary">Click here if not redirected</a>
+</section>
+{% endblock %}

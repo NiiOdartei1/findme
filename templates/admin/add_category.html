@@ -1,0 +1,32 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}{% if category %}Edit category{% else %}Add category{% endif %} | FindMe Admin{% endblock %}
+{% block page_title %}{% if category %}Edit category{% else %}Add category{% endif %}{% endblock %}
+
+{% block content %}
+<div class="admin-page-intro">
+  <div>
+    <h2>{% if category %}Update category details{% else %}Create a category{% endif %}</h2>
+    <p>{% if category %}Changes will be reflected anywhere this category is used.{% else %}Give this group a clear name and an optional description.{% endif %}</p>
+  </div>
+</div>
+<div class="admin-panel form-card">
+  <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <div class="form-group">
+      <label for="category-name">Category name *</label>
+      <input id="category-name" type="text" name="name" placeholder="e.g., Essentials" value="{{ category.name if category else '' }}" maxlength="120" required />
+    </div>
+
+    <div class="form-group">
+      <label for="category-description">Description</label>
+      <textarea id="category-description" name="description" rows="4" placeholder="What's in this category?">{{ category.description if category else '' }}</textarea>
+    </div>
+
+    <div class="form-actions">
+      <a href="{{ url_for('admin_categories') }}" class="admin-button admin-button-secondary">Cancel</a>
+      <button type="submit" class="admin-button admin-button-primary">{% if category %}Save changes{% else %}Create category{% endif %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

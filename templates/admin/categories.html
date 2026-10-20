@@ -1,0 +1,47 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Categories | FindMe Admin{% endblock %}
+{% block page_title %}Categories{% endblock %}
+
+{% block content %}
+<div class="admin-grid">
+  <div class="admin-page-intro">
+    <div>
+      <h2>Product categories</h2>
+      <p>Organize your catalog and keep category details current.</p>
+    </div>
+    <a href="{{ url_for('admin_add_category') }}" class="admin-button admin-button-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Add category
+    </a>
+  </div>
+
+  {% if categories %}
+    <div class="categories-grid">
+      {% for category in categories %}
+        <article class="category-card">
+          <div class="category-card-head">
+            <h4>{{ category.name }}</h4>
+            <span class="status-badge">{{ category.products|length }} item{% if category.products|length != 1 %}s{% endif %}</span>
+          </div>
+          <p>{{ category.description or 'No description provided.' }}</p>
+          <div class="category-card-foot">
+            <span class="category-count">Category #{{ category.id }}</span>
+            <div class="category-actions">
+              <a href="{{ url_for('admin_edit_category', category_id=category.id) }}" class="text-link">Edit</a>
+              <form action="{{ url_for('admin_delete_category', category_id=category.id) }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <button type="submit" class="text-link danger" {% if category.products %}disabled title="Move or remove its products before deleting"{% else %}onclick="return confirm('Delete this category? This cannot be undone.')"{% endif %}>Delete</button>
+              </form>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <section class="admin-panel">
+      <p class="empty-note">No categories yet. Create a category before adding products.</p>
+    </section>
+  {% endif %}
+</div>
+{% endblock %}

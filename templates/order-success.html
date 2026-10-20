@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmed | FindMe{% endblock %}
+
+{% block content %}
+<section class="page-hero simple">
+  <div class="container">
+    <div class="success-section">
+      <div class="success-icon">✓</div>
+      <p class="eyebrow">Payment confirmed</p>
+      <h1>Thank you for your order.</h1>
+      <p>Your Paystack payment was verified. We’ll prepare your order for delivery.</p>
+
+      <div class="order-summary">
+        <div class="summary-item">
+          <strong>Order number</strong>
+          <span>{{ order.order_number }}</span>
+        </div>
+        <div class="summary-item">
+          <strong>Payment</strong>
+          <span>{{ currency(order.total) }} · Paid</span>
+        </div>
+        <div class="summary-item">
+          <strong>Order status</strong>
+          <span>{{ order.status }}</span>
+        </div>
+      </div>
+
+      <div class="success-actions">
+        <a href="{{ url_for('account') }}" class="button primary">View orders</a>
+        <a href="{{ url_for('shop') }}" class="button secondary">Continue shopping</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if products %}
+  <section class="container related-section">
+    <div class="section-heading">
+      <p class="eyebrow">Complete the look</p>
+      <h2>You might also like.</h2>
+    </div>
+    <div class="product-grid">
+      {% for product in products %}
+        <article class="product-card">
+          <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-image-wrap">
+            <img src="{{ product.image }}" alt="{{ product.name }}" loading="lazy" />
+          </a>
+          <div class="product-meta">
+            <div class="product-topline">
+              <span>{{ product.category.name }}</span>
+              <span>{{ product.rating }} ★</span>
+            </div>
+            <h3>{{ product.name }}</h3>
+            <div class="product-price-row">
+              <strong>{{ currency(product.price) }}</strong>
+              <span>{{ currency(product.old_price) if product.old_price else '' }}</span>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Dashboard | FindMe Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-grid">
+  <div class="admin-page-intro">
+    <div>
+      <h2>Store overview</h2>
+      <p>A clear view of your catalog and the latest activity.</p>
+    </div>
+    <a href="{{ url_for('admin_add_product') }}" class="admin-button admin-button-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Add product
+    </a>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-head">
+        <span class="stat-label">Products</span>
+        <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="m4 12 8 4 8-4M4 17l8 4 8-4"/></svg></span>
+      </div>
+      <strong class="stat-value">{{ total_products }}</strong>
+      <span class="stat-note">Active catalog items</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-head">
+        <span class="stat-label">Orders</span>
+        <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H7"/><circle cx="10" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg></span>
+      </div>
+      <strong class="stat-value">{{ total_orders }}</strong>
+      <span class="stat-note">{{ pending_orders }} awaiting processing</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-head">
+        <span class="stat-label">Revenue</span>
+        <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+      </div>
+      <strong class="stat-value">{{ currency(total_revenue) }}</strong>
+      <span class="stat-note">Total order value</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-head">
+        <span class="stat-label">Customers</span>
+        <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M19 8a4 4 0 0 1 0 8M21 21v-2a6 6 0 0 0-4-5.7"/></svg></span>
+      </div>
+      <strong class="stat-value">{{ total_customers }}</strong>
+      <span class="stat-note">{{ total_categories }} product categories</span>
+    </div>
+  </div>
+
+  <section class="admin-panel">
+    <div class="panel-header">
+      <div class="panel-heading">
+        <h3>Recent orders</h3>
+        <p>Keep track of the latest purchases.</p>
+      </div>
+      <a href="{{ url_for('admin_orders') }}" class="text-link">View all</a>
+    </div>
+
+    <div class="table-wrap">
+      {% if recent_orders %}
+        <table>
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in recent_orders %}
+              <tr>
+                <td><strong>{{ order.order_number }}</strong></td>
+                <td>{{ order.email or order.user.name }}</td>
+                <td>{{ currency(order.total) }}</td>
+                <td><span class="status-badge {{ order.status|lower }}">{{ order.status }}</span></td>
+                <td>{{ order.created_at.strftime('%b %d, %Y') }}</td>
+                <td><a href="{{ url_for('admin_order_detail', order_id=order.id) }}" class="text-link">Details</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="empty-note">No orders yet.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <div class="quick-actions">
+    <a href="{{ url_for('admin_add_category') }}" class="admin-button admin-button-secondary">Add category</a>
+    <a href="{{ url_for('admin_products') }}" class="admin-button admin-button-secondary">Manage inventory</a>
+  </div>
+</div>
+{% endblock %}

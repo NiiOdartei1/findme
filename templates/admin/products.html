@@ -1,0 +1,84 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Products | FindMe Admin{% endblock %}
+{% block page_title %}Products{% endblock %}
+
+{% block content %}
+<div class="admin-grid">
+  <div class="admin-page-intro">
+    <div>
+      <h2>Product inventory</h2>
+      <p>Manage product details, pricing, and stock levels.</p>
+    </div>
+    <a href="{{ url_for('admin_add_product') }}" class="admin-button admin-button-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Add product
+    </a>
+  </div>
+
+  <section class="admin-panel">
+    <div class="panel-header">
+      <div class="panel-heading">
+        <h3>All products</h3>
+        <p>{{ products|length }} item{% if products|length != 1 %}s{% endif %} in your catalog</p>
+      </div>
+    </div>
+
+    <div class="panel-tools">
+      <input class="admin-search" type="search" placeholder="Search products..." aria-label="Search products" data-filter-for="products" data-filter-field="text" />
+    </div>
+
+    <div class="table-wrap">
+      {% if products %}
+        <table data-filter-table="products">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Visibility</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in products %}
+              <tr data-search="{{ product.name }} {{ product.category.name }} {{ product.price }} {{ product.stock }}">
+                <td>
+                  <div class="product-cell">
+                    {% if product.image %}
+                      <img src="{{ product.image }}" alt="" class="product-thumb" loading="lazy" />
+                    {% else %}
+                      <span class="product-thumb" aria-hidden="true"></span>
+                    {% endif %}
+                    <span>
+                      <strong>{{ product.name }}</strong>
+                      <span class="product-meta">#{{ product.id }}</span>
+                    </span>
+                  </div>
+                </td>
+                <td>{{ product.category.name }}</td>
+                <td>{{ currency(product.price) }}</td>
+                <td class="{% if product.stock <= 5 %}stock-low{% endif %}">{{ product.stock }}{% if product.stock <= 5 %} · Low{% endif %}</td>
+                <td>{% if product.featured %}<span class="status-badge delivered">Featured</span>{% else %}<span class="status-badge">Standard</span>{% endif %}</td>
+                <td>
+                  <div class="inline-actions">
+                    <a href="{{ url_for('admin_edit_product', product_id=product.id) }}" class="text-link">Edit</a>
+                    <form action="{{ url_for('admin_delete_product', product_id=product.id) }}" method="POST">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                      <button type="submit" class="text-link danger" onclick="return confirm('Delete this product? This cannot be undone.')">Delete</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="empty-note table-empty" data-empty-for="products" hidden>No products match your search.</p>
+      {% else %}
+        <p class="empty-note">No products yet. Add your first product to start building the catalog.</p>
+      {% endif %}
+    </div>
+  </section>
+</div>
+{% endblock %}

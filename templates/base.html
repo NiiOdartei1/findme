@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}FindMe{% endblock %}</title>
+    <meta name="description" content="Premium clothing and accessories for elevated everyday style." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    {% if request.path.startswith('/admin') %}
+      <link rel="stylesheet" href="/static/css/admin.css" />
+    {% else %}
+      <link rel="stylesheet" href="/static/css/styles.css" />
+    {% endif %}
+  </head>
+  <body>
+    {% if request.path.startswith('/admin') %}
+      <header class="site-header admin-header">
+        <div class="topbar admin-topbar">
+          <p>FindMe Admin Control Panel</p>
+        </div>
+        <nav class="navbar container admin-navbar">
+          <a href="{{ url_for('admin') }}" class="brand admin-brand" aria-label="FindMe Kreations Admin Home">
+            <img src="/static/findme_kreations-removebg-preview.png?v=3" alt="FindMe Kreations logo" class="brand-logo brand-logo-admin" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" />
+            <span class="brand-text" aria-hidden="true" style="display:none;">
+              <span class="brand-name">FindMe</span>
+              <span class="brand-tagline">Kreations</span>
+            </span>
+          </a>
+          <div class="nav-links admin-nav-links">
+            <a href="{{ url_for('admin') }}">Dashboard</a>
+            <a href="{{ url_for('admin_products') }}">Products</a>
+            <a href="{{ url_for('admin_categories') }}">Categories</a>
+            <a href="{{ url_for('admin_orders') }}">Orders</a>
+          </div>
+          <div class="nav-actions admin-nav-actions">
+            <form action="{{ url_for('admin_logout') }}" method="post">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+              <button type="submit">Logout</button>
+            </form>
+          </div>
+        </nav>
+      </header>
+    {% else %}
+      <header class="site-header">
+        <div class="topbar">
+          <div class="topbar-track" aria-hidden="true">
+            <span>SS26 Edit now live</span>
+            <span>Free shipping on orders over GH₵ 250</span>
+            <span>Easy 30-day returns</span>
+            <span>SS26 Edit now live</span>
+            <span>Free shipping on orders over GH₵ 250</span>
+            <span>Easy 30-day returns</span>
+          </div>
+          <p class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;">Free shipping on orders over GH₵ 250 &middot; Easy 30-day returns &middot; SS26 Edit now live</p>
+        </div>
+        <nav class="navbar container">
+          <a href="{{ url_for('index') }}" class="brand" aria-label="FindMe Kreations Home">
+            <img src="/static/findme_kreations-removebg-preview.png?v=3" alt="FindMe Kreations logo" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" />
+            <span class="brand-text" aria-hidden="true" style="display:none;">
+              <span class="brand-name">FindMe</span>
+              <span class="brand-tagline">Kreations</span>
+            </span>
+          </a>
+          <div class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('shop') }}">Shop</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+          </div>
+          <div class="nav-actions">
+            {% if current_user %}
+              <a href="{{ url_for('account') }}">My account</a>
+              <form action="{{ url_for('customer_logout') }}" method="post" class="nav-logout-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <button type="submit">Sign out</button>
+              </form>
+            {% else %}
+              <a href="{{ url_for('login') }}">Sign in</a>
+            {% endif %}
+            <a href="{{ url_for('cart') }}" class="cart-link">
+              Cart <span>{{ cart_count }}</span>
+            </a>
+          </div>
+        </nav>
+      </header>
+    {% endif %}
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand-block">
+          <img src="/static/findme_kreations-removebg-preview.png?v=2" alt="FindMe Kreations logo" class="footer-logo" />
+          <p>Premium essentials for a refined everyday wardrobe.</p>
+        </div>
+        <div>
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="{{ url_for('shop') }}">New Arrivals</a></li>
+            <li><a href="{{ url_for('shop') }}">Essentials</a></li>
+            <li><a href="{{ url_for('shop') }}">Accessories</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="{{ url_for('contact') }}">Shipping</a></li>
+            <li><a href="{{ url_for('contact') }}">Returns</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Follow</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Pinterest</a></li>
+            <li><a href="#">TikTok</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+  </body>
+</html>

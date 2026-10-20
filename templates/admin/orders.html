@@ -1,0 +1,89 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Orders | FindMe Admin{% endblock %}
+{% block page_title %}Orders{% endblock %}
+
+{% block content %}
+<div class="orders-page">
+  <div class="admin-page-intro">
+    <div>
+      <h2>Order management</h2>
+      <p>Review customer purchases and keep order statuses up to date.</p>
+    </div>
+  </div>
+
+  <div class="orders-summary">
+    <div class="summary-card">
+      <span>Total orders</span>
+      <strong>{{ orders|length }}</strong>
+    </div>
+    <div class="summary-card">
+      <span>Pending</span>
+      <strong>{{ orders|selectattr('status', 'equalto', 'Pending')|list|length }}</strong>
+    </div>
+    <div class="summary-card">
+      <span>Revenue</span>
+      <strong>{{ currency(orders|map(attribute='total')|sum) }}</strong>
+    </div>
+  </div>
+
+  <div class="admin-panel">
+    <div class="panel-header">
+      <div class="panel-heading">
+        <h3>All orders</h3>
+        <p>Newest orders appear first.</p>
+      </div>
+    </div>
+
+    <div class="panel-tools">
+      <input class="admin-search" type="search" placeholder="Search order or customer..." aria-label="Search orders" data-filter-for="orders" data-filter-field="text" />
+      <select class="admin-select" aria-label="Filter orders by status" data-filter-for="orders" data-filter-field="status">
+        <option value="">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="processing">Processing</option>
+        <option value="shipped">Shipped</option>
+        <option value="delivered">Delivered</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      {% if orders %}
+        <table data-filter-table="orders">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+              <tr data-search="{{ order.order_number }} {{ order.email or order.user.name }}" data-status="{{ order.status|lower }}">
+                <td><strong>{{ order.order_number }}</strong></td>
+                <td>
+                  <span class="customer-cell">
+                    <strong>{{ order.user.name }}</strong>
+                    <span class="product-meta">{{ order.email or order.user.email }}</span>
+                  </span>
+                </td>
+                <td>{{ currency(order.total) }}</td>
+                <td><span class="status-badge {{ order.payment_status }}">{{ order.payment_status|replace('_', ' ')|title }}</span></td>
+                <td><span class="status-badge {{ order.status|lower }}">{{ order.status }}</span></td>
+                <td>{{ order.created_at.strftime('%b %d, %Y') }}</td>
+                <td><a href="{{ url_for('admin_order_detail', order_id=order.id) }}" class="text-link">Details</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="empty-note table-empty" data-empty-for="orders" hidden>No orders match your filters.</p>
+      {% else %}
+        <p class="empty-note">No orders yet. New customer purchases will appear here.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
